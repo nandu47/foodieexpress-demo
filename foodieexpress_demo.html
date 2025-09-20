@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodieExpress - Food Delivery Demo</title>
+<style>
+  body { font-family: 'Arial', sans-serif; margin:0; padding:0; background:#fff8f0; color:#333;}
+  header { background:#ff6347; color:white; padding:15px; text-align:center; font-size:24px; }
+  h2, h3 { color:#ff6347; text-align:center; }
+  .container { padding:20px; max-width:600px; margin:0 auto;}
+  input, button { padding:10px; margin:5px 0; border-radius:8px; border:1px solid #ccc; font-size:16px; width:100%; }
+  button { background:#ff6347; color:white; border:none; cursor:pointer; }
+  button:hover { background:#e5533d; }
+  .product { display:flex; align-items:center; margin:10px 0; border-radius:12px; background:#fff; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); cursor:pointer; transition:0.3s; }
+  .product:hover { background:#ffe6e1; transform:scale(1.02); }
+  .product img { width:80px; height:80px; border-radius:10px; margin-right:15px; object-fit:cover; }
+  .cart-item { background:#ffe6e1; padding:8px; margin:5px 0; border-radius:5px; }
+  #checkout, #confirmation { margin-top:20px; padding:15px; background:#fff5f3; border-radius:12px; border:1px solid #ffb3a0; }
+  #confirmation h2 { color:green; text-align:center; }
+  .vendor, .order-status { background:#fff; border-radius:10px; padding:10px; margin:10px 0; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+</style>
+</head>
+<body>
+
+<header>🍔 FoodieExpress</header>
+
+<div class="container" id="registration">
+  <h3>User Registration</h3>
+  <input type="text" id="username" placeholder="Enter your name"/>
+  <input type="text" id="location" placeholder="Enter your city"/>
+  <button onclick="registerUser()">Register</button>
+</div>
+
+<div class="container" id="vendors" style="display:none;">
+  <h3>Select Vendor / Restaurant</h3>
+  <div class="vendor" onclick="selectVendor('Pizza Heaven')">Pizza Heaven - 4.5⭐</div>
+  <div class="vendor" onclick="selectVendor('Burger Hub')">Burger Hub - 4.2⭐</div>
+  <div class="vendor" onclick="selectVendor('Fry Corner')">Fry Corner - 4.0⭐</div>
+</div>
+
+<div class="container" id="products" style="display:none;">
+  <h3>Menu - <span id="vendorName"></span></h3>
+  <div class="product" onclick="addToCart('Pizza', 199)">
+    <img src="https://images.unsplash.com/photo-1601924638867-3c73c3c6e4c5?&w=80&h=80&fit=crop" alt="Pizza"/>
+    <span>Pizza - ₹199</span>
+  </div>
+  <div class="product" onclick="addToCart('Cheese Burger', 129)">
+    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?&w=80&h=80&fit=crop" alt="Burger"/>
+    <span>Cheese Burger - ₹129</span>
+  </div>
+  <div class="product" onclick="addToCart('Fries', 79)">
+    <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?&w=80&h=80&fit=crop" alt="Fries"/>
+    <span>Fries - ₹79</span>
+  </div>
+  <button onclick="showCheckout()">Go to Checkout</button>
+</div>
+
+<div class="container" id="checkout" style="display:none;">
+  <h3>Checkout</h3>
+  <div id="cartList"></div>
+  <p>Payment Option: COD</p>
+  <button onclick="placeOrder()">Place Order</button>
+</div>
+
+<div class="container" id="confirmation" style="display:none;">
+  <h2>✅ Order Confirmed!</h2>
+  <p>Invoice generated. Delivery in 30 mins.</p>
+  <div class="order-status">
+    <p>Order Status: Preparing 🍳</p>
+    <p>Delivery Partner Assigned 🚴</p>
+  </div>
+</div>
+
+<script>
+let cart = [];
+let selectedVendor = "";
+
+function registerUser() {
+  const name = document.getElementById('username').value;
+  const location = document.getElementById('location').value;
+  if(name === '' || location === '') { alert('Enter name and city'); return; }
+  alert('Registered: ' + name + ', ' + location);
+  document.getElementById('registration').style.display = 'none';
+  document.getElementById('vendors').style.display = 'block';
+}
+
+function selectVendor(vendor) {
+  selectedVendor = vendor;
+  document.getElementById('vendorName').innerText = vendor;
+  document.getElementById('vendors').style.display = 'none';
+  document.getElementById('products').style.display = 'block';
+}
+
+function addToCart(item, price) {
+  cart.push({item, price});
+  alert(item + ' added to cart');
+}
+
+function showCheckout() {
+  if(cart.length===0) { alert('Cart is empty'); return; }
+  document.getElementById('products').style.display = 'none';
+  document.getElementById('checkout').style.display = 'block';
+  const cartDiv = document.getElementById('cartList');
+  cartDiv.innerHTML = '';
+  cart.forEach(c => cartDiv.innerHTML += `<div class="cart-item">${c.item} - ₹${c.price}</div>`);
+}
+
+function placeOrder() {
+  document.getElementById('checkout').style.display = 'none';
+  document.getElementById('confirmation').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
